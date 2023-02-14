@@ -1,8 +1,8 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Render } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { AppService } from './app.service';
-import KonyvDto from './konyv.dto';
-import Konyv from './konyv.entity';
+import BuildingsDto from './building.dto';
+import Building from './building.entity';
 
 @Controller()
 export class AppController {
@@ -17,26 +17,29 @@ export class AppController {
     return { message: 'Welcome to the homepage' };
   }
 
-  @Get('/konyv')
-  async mindenKonyv() {
-    const konyvekRepo = this.dataSource.getRepository(Konyv);
-    return await konyvekRepo.find();
+  @Get('/building')
+  async allBuildings() {
+    const buildingsRepo = this.dataSource.getRepository(Building);
+    return await buildingsRepo.find();
   }
 
-@Post('/konyv')
-async ujKonyv(@Body() konyvDto: KonyvDto) {
-  if(!konyvDto.cim || !konyvDto.szerzo ||!konyvDto.hossz){
+@Post('/building')
+async newBuilding(@Body() buildingDto: BuildingsDto) {
+  if(!buildingDto.tulajdonos || !buildingDto.alapterulet ||!buildingDto.epiteseve){
     throw new BadRequestException('Minden mezőt kötelező kitölteni');
   }
-  if( typeof konyvDto.hossz == 'string'){
-    throw new BadRequestException('A hossz csak egész szám lehet.');
+  if( typeof buildingDto.epiteseve != 'number'){
+    throw new BadRequestException('Az építés éve csak egész szám lehet.');
   }
-    const konyvekRepo = this.dataSource.getRepository(Konyv);
-    const konyv = new Konyv();
-    konyv.szerzo = konyvDto.szerzo;
-    konyv.cim = konyvDto.cim;
-    konyv.hossz = konyvDto.hossz;
-    await konyvekRepo.save(konyv);
+  if( typeof buildingDto.alapterulet != 'number'){
+    throw new BadRequestException('Az alapterület csak egész szám lehet.');
+  }
+    const buildingsRepo = this.dataSource.getRepository(Building);
+    const building = new Building();
+    building.tulajdonos = buildingDto.tulajdonos;
+    building.alapterulet = buildingDto.alapterulet;
+    building.epiteseve = buildingDto.epiteseve;
+    await buildingsRepo.save(building);
 
 }
 
@@ -48,9 +51,9 @@ async ujKonyv(@Body() konyvDto: KonyvDto) {
     konyvekRepo.save(konyv)
   }
 */
-  @Delete('/konyv/:id')
+  @Delete('/building/:id')
   torlesKonyv(@Param('id') id: number) {
-  const konyvekRepo = this.dataSource.getRepository(Konyv);
-  konyvekRepo.delete(id)
+  const buildingsRepo = this.dataSource.getRepository(Building);
+  buildingsRepo.delete(id)
   }
 }

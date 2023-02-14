@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import Konyv from './konyv.entity';
+import Konyv from './building.entity';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import Konyv from './konyv.entity';
       host: 'localhost',
       username: 'root',
       password: '',
-      database: 'konyvek',
+      database: 'buildings',
       entities: [
         Konyv
       ],

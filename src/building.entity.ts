@@ -2,16 +2,16 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
-export default class Konyv{
+export default class Building{
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    szerzo: string;
-
-    @Column()
-    cim: string;
+    tulajdonos: string;
 
     @Column('int')
-    hossz: number;
+    alapterulet: number;
+
+    @Column('int')
+    epiteseve: number;
 }
